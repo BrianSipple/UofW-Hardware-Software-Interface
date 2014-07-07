@@ -53,7 +53,8 @@ int main(int argc, char* argv[]) {
   // to 11 instead? How about 100? 1000? Make sure to set
   // the second argument back to 10 when you are done
   // testing.
-  // Answer:
+  // Answer: 100 allows the program to execute, but it ends with an "Abort trap 6" error
+  // 1000 causes a segmentation fault
   fillArray(array, 10);
 
   int value;
@@ -131,17 +132,5 @@ int main(int argc, char* argv[]) {
   // you would expect. (Hint, you'll need to use the
   // -> operator to access fields of a FourInts*
   // variable instead of the . operator).
-
-  FourInts* heap_struct = malloc(sizeof(FourInts));  // allocate the FourInts struct dynamically on the heap
-
-  fillArray((int*)heap_struct, 4);     // populate the struct with 4 int values
-
-  assert(heap_struct->a == 2);      // access each field and sanity check
-  assert(heap_struct->b == 5);
-  assert(heap_struct->c == 8);
-  assert(heap_struct->d == 11);
-
-  free(heap_struct);
-
   return 0;
 }
