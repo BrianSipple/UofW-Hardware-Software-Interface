@@ -133,7 +133,15 @@ int bitAnd(int x, int y) {
  *   Rating: 1
  */
 int bitXor(int x, int y) {
-  return 2;
+	/*
+	 * Combine the impossibility of an AND with the fact the
+	 * possibility of none. The surviving positive must therefore be exclusive.
+	 */
+	int notAnd = ~(x & y);
+	int possibleNone = ( (~x) & (~y) );
+
+	int result = notAnd & possibleNone;
+	return result;
 }
 /* 
  * thirdBits - return word with every third bit (starting from the LSB) set to 1
