@@ -123,7 +123,7 @@ int bitAnd(int x, int y) {
     	 /* "OR"ing the two bitwise negations of x and y will return the opposite of the AND
     	  * Therefore, the opposite of the opposite of the AND will return the AND
     	  */
-  return ~(~x | ~ y);
+  return ~( (~x) | (!y) );
 }
 /* 
  * bitXor - x^y using only ~ and & 
@@ -138,7 +138,7 @@ int bitXor(int x, int y) {
 	 * possibility of none. The surviving positive must therefore be exclusive.
 	 */
 	int notAnd = ~(x & y);
-	int possibleNone = ( (~x) & (~y) );
+	int possibleNone = ~(~x & ~y);
 
 	int result = notAnd & possibleNone;
 	return result;
@@ -151,7 +151,13 @@ int bitXor(int x, int y) {
  *   Rating: 1
  */
 int thirdBits(void) {
-  return 2;
+	/* start with 11111111, and then AND it with 10010010 to
+	 * create a world with 1's in every 3rd bit
+	 */
+	int ones = 0XFF;
+	int result = ones & 0X92;
+
+	return result;
 }
 // Rating: 2
 /* 
@@ -164,7 +170,11 @@ int thirdBits(void) {
  *   Rating: 2
  */
 int fitsBits(int x, int n) {
-  return 2;
+
+	int nminus = n + (~0);  // n-1
+	int sig = x >> 31;      // arithmetic right shift of 31 bits, giving us the MSB
+	return !(((x>>nminus))^sig);
+
 }
 /* 
  * sign - return 1 if positive, 0 if zero, and -1 if negative
@@ -175,7 +185,10 @@ int fitsBits(int x, int n) {
  *  Rating: 2
  */
 int sign(int x) {
-  return 2;
+	int isValue = !!x;  // tests for 0
+	int sig = x >> 31;  //
+	return isValue | sig;
+
 }
 /* 
  * getByte - Extract byte n from word x
@@ -186,7 +199,7 @@ int sign(int x) {
  *   Rating: 2
  */
 int getByte(int x, int n) {
-  return 2;
+  return (x >> 8*n) & 0xFF;
 }
 // Rating: 3
 /* 
@@ -198,7 +211,12 @@ int getByte(int x, int n) {
  *   Rating: 3 
  */
 int logicalShift(int x, int n) {
-  return 2;
+	int prex = x >> n;
+	int mask = 1 << 31;
+	mask = mask >> n;
+	mask = mask << 1;
+	mask = ~mask;
+	return prex & mask;
 }
 /* 
  * addOK - Determine if can compute x+y without overflow
@@ -209,7 +227,12 @@ int logicalShift(int x, int n) {
  *   Rating: 3
  */
 int addOK(int x, int y) {
-  return 2;
+	int sigX = (x<<31) & 1;
+	int sigY = (y >> 31) & 1;
+	int sigSum = ((x+y) >> 31) & 1;
+	int same_pri_sig = sigX ^ sigY;
+	int same_result_sig = !(sigX ^ sigSum);
+	return same_pri_sig | same_result_sig;
 }
 // Rating: 4
 /* 
@@ -220,7 +243,12 @@ int addOK(int x, int y) {
  *   Rating: 4 
  */
 int bang(int x) {
-  return 2;
+  int notZero, sig, reverse, reverseSig;
+  sig = (x>>31) & 1;
+  reverse = (~x) + 1;
+  reverseSig = (reverse >> 31) & 1;
+  notZero = sig | reverseSig;
+  return notZero ^ 1;
 }
 // Extra Credit: Rating: 3
 /* 
@@ -231,7 +259,10 @@ int bang(int x) {
  *   Rating: 3
  */
 int conditional(int x, int y, int z) {
-  return 2;
+  int isZero = !x;
+  int preMask = ~isZero + 1;
+  int reverseMask = ~preMask;
+  return ( z & preMask) | (y & reverseMask);
 }
 // Extra Credit: Rating: 4
 /*
@@ -243,5 +274,10 @@ int conditional(int x, int y, int z) {
  *   Rating: 4
  */
 int isPower2(int x) {
-  return 2;
+  int sig = x>>31;
+  int minus1 = ~0;
+  int xminus1 = x + minus1;
+  sig = ~sig;
+  return (!(xminus1 & x)) & sig & (!!x);
+
 }
