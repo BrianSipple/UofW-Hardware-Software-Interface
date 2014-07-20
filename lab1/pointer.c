@@ -1,7 +1,7 @@
 /*
  * CSE 351 HW1 (Data Lab - Pointers)
  *
- * <Please put your name and userid here>
+ * <Brian Sipple, userID: 5247640>
  *
  * pointer.c - Source file with your solutions to the Lab.
  *          This is the file you will hand in to your instructor.
@@ -85,8 +85,10 @@ int intSize() {
   int * intPtr1;
   int * intPtr2;
   // TODO: Write code to compute size of an integer.
+  *intPtr1 = intArray;
+  *intPtr2 = intArray + 1;
 
-  return 2;
+  return (*intPtr2) - (*intPtr1);
 }
 
 /*
@@ -97,8 +99,10 @@ int doubleSize() {
   double * doubPtr1;
   double * doubPtr2;
   // TODO: Write code to compute size of a double.
+  *doubPtr1 = doubArray;
+  *doubPtr2 = doubArray + 1;
 
-  return 2;
+  return (*doubPtr2) - (*doubPtr1);
 }
 
 /*
@@ -110,7 +114,12 @@ int pointerSize() {
   double ** ptrPtr2;
   // TODO: Write code to compute size of a pointer.
 
-  return 2;
+  int len;
+  ptrPtr1 = ptrArray;
+  ptrPtr2 = ptrArray + 1;
+  len = (int)ptrPtr1 - ptrPtr2;
+
+  return len;
 }
 
 /*
@@ -124,6 +133,8 @@ int changeValue() {
   // TODO: Write code to change value of intArray[5] to 351 using only
   //       intPtr1 and the + operator.
 
+  intPtr1 = intPtr1 + 5;
+  *intPtr1 = 351;
   return intArray[5];
 }
 
@@ -136,7 +147,13 @@ int changeValue() {
  */
 int withinSameBlock(int * ptr1, int * ptr2) {
   // TODO
-  return 2;
+  int mask = ~63;  // bitwise complement of 63: 0X10000000
+  int result = ( ((int) ptr1 & mask) ^ ((int) ptr2&mask));
+  int sig = (result >> 31)&1;
+  int reverse = ~result + 1;
+  int reSig = (reverse>>31)&1;
+
+  return (sig | reSig)^1;   // returns 0 if sig or reSig are 1
 }
 
 /*
@@ -145,7 +162,10 @@ int withinSameBlock(int * ptr1, int * ptr2) {
  */
 int withinArray(int * intArray, int size, int * ptr) {
   // TODO
-  return 2;
+  int len = ptr - intArray;  // distance b/w ptr and intArray
+  int lenSig = len >> 31;
+  int sizeCutSig = (size - 1, - len) >> 31;
+  return (lenSig | sizeCutSig) + 1;
 }
 /*
  * Return x with the n bits that begin at position p inverted (i.e.,
@@ -154,5 +174,9 @@ int withinArray(int * intArray, int size, int * ptr) {
  */
 int invert(int x, int p, int n) {
   // TODO
-  return 2;
+	int allOnes = ~0;
+	int pOnes = allOnes << p;
+	int pnOnes = allOnes <<(p + n);
+	int midOnes = pOnes ^ pnOnes;
+	return x ^ midOnes;
 }
