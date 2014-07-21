@@ -123,7 +123,7 @@ int bitAnd(int x, int y) {
     	 /* "OR"ing the two bitwise negations of x and y will return the opposite of the AND
     	  * Therefore, the opposite of the opposite of the AND will return the AND
     	  */
-  return ~( (~x) | (!y) );
+  return ~( (~x) | (~y) );
 }
 /* 
  * bitXor - x^y using only ~ and & 
@@ -199,7 +199,7 @@ int sign(int x) {
  *   Rating: 2
  */
 int getByte(int x, int n) {
-  return (x >> 8*n) & 0xFF;
+  return (x >> (8+n)) & 0xFF;
 }
 // Rating: 3
 /* 

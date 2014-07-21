@@ -1,7 +1,7 @@
 /*
  * CSE 351 HW1 (Data Lab - Pointers)
  *
- * <Brian Sipple, userID: 5247640>
+ * <Please put your name and userid here>
  *
  * pointer.c - Source file with your solutions to the Lab.
  *          This is the file you will hand in to your instructor.
@@ -86,9 +86,8 @@ int intSize() {
   int * intPtr2;
   // TODO: Write code to compute size of an integer.
   *intPtr1 = intArray;
-  *intPtr2 = intArray + 1;
-
-  return (*intPtr2) - (*intPtr1);
+  *intPtr2 = intArray+1;
+  return (*intPtr2)-(*intPtr1);
 }
 
 /*
@@ -98,11 +97,12 @@ int doubleSize() {
   double doubArray[10];
   double * doubPtr1;
   double * doubPtr2;
+  int len;
   // TODO: Write code to compute size of a double.
-  *doubPtr1 = doubArray;
-  *doubPtr2 = doubArray + 1;
-
-  return (*doubPtr2) - (*doubPtr1);
+  doubPtr1 = doubArray;
+  doubPtr2 = doubArray+1;
+  len = (int)doubPtr2 - (int)doubPtr1;
+  return len;
 }
 
 /*
@@ -112,13 +112,11 @@ int pointerSize() {
   double * ptrArray[10];
   double ** ptrPtr1;
   double ** ptrPtr2;
-  // TODO: Write code to compute size of a pointer.
-
   int len;
+  // TODO: Write code to compute size of a pointer.
   ptrPtr1 = ptrArray;
-  ptrPtr2 = ptrArray + 1;
-  len = (int)ptrPtr1 - ptrPtr2;
-
+  ptrPtr2 = ptrArray+1;
+  len = (int)ptrPtr2 - (int)ptrPtr1;
   return len;
 }
 
@@ -132,7 +130,6 @@ int changeValue() {
   int * intPtr2;
   // TODO: Write code to change value of intArray[5] to 351 using only
   //       intPtr1 and the + operator.
-
   intPtr1 = intPtr1 + 5;
   *intPtr1 = 351;
   return intArray[5];
@@ -146,14 +143,13 @@ int changeValue() {
  * Operators / and % and loops are NOT allowed.
  */
 int withinSameBlock(int * ptr1, int * ptr2) {
-  // TODO
-  int mask = ~63;  // bitwise complement of 63: 0X10000000
-  int result = ( ((int) ptr1 & mask) ^ ((int) ptr2&mask));
-  int sig = (result >> 31)&1;
-  int reverse = ~result + 1;
-  int reSig = (reverse>>31)&1;
+    int mask = ~63;
+    int result = (((int)ptr1&mask)^((int)ptr2&mask));
+    int sig = (result>>31)&1;
+    int reverse = ~result + 1;
+    int reSig = (reverse>>31)&1;
 
-  return (sig | reSig)^1;   // returns 0 if sig or reSig are 1
+    return (sig|reSig)^1;
 }
 
 /*
@@ -161,11 +157,10 @@ int withinSameBlock(int * ptr1, int * ptr2) {
  * 0 otherwise.
  */
 int withinArray(int * intArray, int size, int * ptr) {
-  // TODO
-  int len = ptr - intArray;  // distance b/w ptr and intArray
-  int lenSig = len >> 31;
-  int sizeCutSig = (size - 1, - len) >> 31;
-  return (lenSig | sizeCutSig) + 1;
+  int len = ptr - intArray;
+  int lenSig = len>>31;
+  int sizeCutSig = (size - 1 - len)>>31;
+  return (lenSig | sizeCutSig)+1;
 }
 /*
  * Return x with the n bits that begin at position p inverted (i.e.,
@@ -173,10 +168,9 @@ int withinArray(int * intArray, int size, int * ptr) {
  * the indices of x to begin with the low-order bit numbered as 0.
  */
 int invert(int x, int p, int n) {
-  // TODO
-	int allOnes = ~0;
-	int pOnes = allOnes << p;
-	int pnOnes = allOnes <<(p + n);
-	int midOnes = pOnes ^ pnOnes;
-	return x ^ midOnes;
+  int allOne = ~0;
+  int pOne = allOne<<p;
+  int pnOne = allOne<<(p+n);
+  int midOne = pOne^pnOne;
+  return x^midOne;
 }
