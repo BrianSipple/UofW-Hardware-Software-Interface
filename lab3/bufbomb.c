@@ -1,6 +1,6 @@
-/* 
- * bufbomb.c - Bomb program that is solved using a buffer overflow attack 
- * 
+/*
+ * bufbomb.c - Bomb program that is solved using a buffer overflow attack
+ *
  * Copyright (c) 2002, R. Bryant and D. O'Hallaron, All rights reserved.
  * May not be used, modified, or copied without permission.
  */
@@ -36,7 +36,7 @@ FILE *infile = NULL;
 
 int submit = NOTIFY;
 
-int quiet = 0; 
+int quiet = 0;
 unsigned hexformat = 0;
 
 unsigned long long cookie = 0;
@@ -133,7 +133,7 @@ unsigned long long getbuf()
   char buf[36];
   volatile char* variable_length;
   int i;
-  unsigned long long val = (unsigned long long)Gets(buf);
+  unsigned long long val = (unsigned long long)Gets(buf); // reads a string from the standard input and stores it in buf... with no way to determine whether the destination actually has enough space or not
   variable_length = alloca((val % 40) < 36 ? 36 : val % 40);
   for(i = 0; i < 36; i++)
   {
@@ -181,8 +181,8 @@ unsigned long long getbuf()
 static char gets_buf[3*GETLEN+1];
 int gets_cnt = 0;
 
-static char trans_char[16] = 
-  {'0', '1', '2', '3', '4', '5', '6', '7', 
+static char trans_char[16] =
+  {'0', '1', '2', '3', '4', '5', '6', '7',
    '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
 static void save_char(char c) {
@@ -240,7 +240,7 @@ char *Gets(char *dest)
 }
 
 /* Track successful results */
-static int level_counts[5] = 
+static int level_counts[5] =
   {NORMAL_CNT, NORMAL_CNT, NORMAL_CNT, NORMAL_CNT, KABOOM_CNT};
 
 int check_level = -1;
@@ -327,7 +327,7 @@ static void launch(int nitro, int offset) {
 	In nitro mode, it makes it even less stable than it would normally be.
 	You don't need to understand it to do the assignment.
   */
-  stable_tweak = (((int) localbuf) & 0x3FF8) + offset; 
+  stable_tweak = (((int) localbuf) & 0x3FF8) + offset;
   space = (int *) alloca(stable_tweak);
   /* Fill full of halt instructions, so that will get seg fault */
   memset(space, HALT_INSTR, stable_tweak);
@@ -373,7 +373,7 @@ int main(int argc, char *argv[])
 
   char *m = memalign(NEW_STACK_SIZE, NEW_STACK_SIZE);
   uint64_t    new_rsp;
-  if(mprotect(m, NEW_STACK_SIZE, PROT_READ|PROT_WRITE|PROT_EXEC) 
+  if(mprotect(m, NEW_STACK_SIZE, PROT_READ|PROT_WRITE|PROT_EXEC)
 != 0) {
        perror("Failure to set stack permissions\n");
        exit(0);
