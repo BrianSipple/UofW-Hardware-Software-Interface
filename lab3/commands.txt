@@ -1,0 +1,5 @@
+file ./bufbomb
+break getbuf
+break *0x400db1
+break bang
+r -u USERID < bang.bytes
