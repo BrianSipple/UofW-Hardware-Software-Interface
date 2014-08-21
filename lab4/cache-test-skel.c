@@ -67,8 +67,14 @@ int get_cache_size(int size) {
   while(1)
   {
     flush_cache();
+
+    // access cache entries from "0" to a tentative cache size
     for(i=0;i<=count;i++)
         access_cache(start + i*block_size);
+
+    // next, see if accessing the cache at "0" is a cache miss outside the loop.
+    // If so, we can compute our size, as the number of "i" iterations have finally thrown
+    // "start" out of the cache
     if(access_cache(start))
     {
         count++;
